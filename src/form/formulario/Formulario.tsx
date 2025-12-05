@@ -20,34 +20,6 @@ export function Formulario() {
     setCpf("");
   };
 
-  const downloadDados = () => {
-    const todosDados = [...dados];
-    if (nome.trim() && idade.trim()) {
-      const dadoAtual = {
-        nome,
-        idade,
-        ...(cpf.trim() && { cpf })
-      };
-      todosDados.push(dadoAtual);
-    }
-
-    const conteudo = todosDados
-      .map(
-        (d) =>
-          `Nome: ${d.nome} | Idade: ${d.idade}${d.cpf ? ` | CPF: ${d.cpf}` : ""
-          }`
-      )
-      .join("\n");
-
-    const blob = new Blob([conteudo], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "dados.txt";
-    link.click();
-    URL.revokeObjectURL(url);
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!nome.trim() || !idade.trim()) return;
@@ -98,11 +70,6 @@ export function Formulario() {
             </li>
           ))}
         </ul>
-        <div className="botoes-download">
-          <button onClick={downloadDados}>
-            Baixar dados em TXT
-          </button>
-        </div>
       </div>
     </div>
   );

@@ -13,14 +13,6 @@
   align-items: center;
 }
 
-.botoes-download {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: center;
-}
-
 .checkbox-cpf {
   display: flex;
   align-items: center;

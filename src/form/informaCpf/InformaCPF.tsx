@@ -36,7 +36,6 @@ export function InformaCPF({ onCPFChange }: InformaCPFProps) {
       </div>
       {mostrarCPF && (
         <label>
-          CPF:
           <input
             type="text"
             value={cpf}

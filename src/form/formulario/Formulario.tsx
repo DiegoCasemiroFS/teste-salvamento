@@ -1,11 +1,9 @@
+import { useFormik } from "formik";
 import { useState } from "react";
 import { InformaCPF } from "../informaCpf/InformaCPF";
 import "./Formulario.style.css";
 
 export function Formulario() {
-  const [nome, setNome] = useState("");
-  const [idade, setIdade] = useState("");
-  const [cpf, setCpf] = useState("");
   const [dados, setDados] = useState<
     {
       nome: string;
@@ -14,47 +12,53 @@ export function Formulario() {
     }[]
   >([]);
 
-  const limparFormulario = () => {
-    setNome("");
-    setIdade("");
-    setCpf("");
-  };
+  const formik = useFormik({
+    initialValues: {
+      nome: "",
+      idade: "",
+      cpf: ""
+    },
+    onSubmit: (values, { resetForm }) => {
+      if (!values.nome.trim() || !values.idade) return;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!nome.trim() || !idade.trim()) return;
+      const novoDado = {
+        nome: values.nome,
+        idade: values.idade,
+        ...(values.cpf.trim() && { cpf: values.cpf })
+      };
+      setDados([...dados, novoDado]);
+      resetForm();
+    }
+  });
 
-    const novoDado = {
-      nome,
-      idade,
-      ...(cpf.trim() && { cpf })
-    };
-    setDados([...dados, novoDado]);
-    limparFormulario();
+  const handleCPFChange = (cpf: string) => {
+    formik.setFieldValue('cpf', cpf);
   };
 
   return (
     <div className="formulario">
       <h2>Formulário</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
         <div className="infos">
           <label>
             Nome:
             <input
               type="text"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
+              value={formik.values.nome}
+              onChange={formik.handleChange}
+              name="nome"
             />
           </label>
           <label>
             Idade:
             <input
               type="number"
-              value={idade}
-              onChange={(e) => setIdade(e.target.value)}
+              value={formik.values.idade}
+              onChange={formik.handleChange}
+              name="idade"
             />
           </label>
-          <InformaCPF onCPFChange={setCpf} />
+          <InformaCPF onCPFChange={handleCPFChange} />
           <button type="submit">
             Salvar
           </button>

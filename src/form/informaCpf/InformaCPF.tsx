@@ -1,3 +1,4 @@
+import { useFormik } from 'formik';
 import { useState } from 'react';
 
 interface InformaCPFProps {
@@ -5,11 +6,17 @@ interface InformaCPFProps {
 }
 
 export function InformaCPF({ onCPFChange }: InformaCPFProps) {
-  const [cpf, setCpf] = useState("");
   const [mostrarCPF, setMostrarCPF] = useState(false);
 
+  const formik = useFormik({
+    initialValues: {
+      cpf: ''
+    },
+    onSubmit: () => {}
+  });
+
   const handleCPFChange = (novoCpf: string) => {
-    setCpf(novoCpf);
+    formik.setFieldValue('cpf', novoCpf);
     if (onCPFChange) {
       onCPFChange(mostrarCPF ? novoCpf : "");
     }
@@ -19,7 +26,7 @@ export function InformaCPF({ onCPFChange }: InformaCPFProps) {
     const novoEstado = !mostrarCPF;
     setMostrarCPF(novoEstado);
     if (onCPFChange) {
-      onCPFChange(novoEstado ? cpf : "");
+      onCPFChange(novoEstado ? formik.values.cpf : "");
     }
   };
 
@@ -38,7 +45,7 @@ export function InformaCPF({ onCPFChange }: InformaCPFProps) {
         <label>
           <input
             type="text"
-            value={cpf}
+            value={formik.values.cpf}
             onChange={(e) => handleCPFChange(e.target.value)}
             placeholder="000.000.000-00"
           />
